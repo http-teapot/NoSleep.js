@@ -117,9 +117,16 @@ var oldIOS = function oldIOS() {
   return typeof navigator !== "undefined" && parseFloat(("" + (/CPU.*OS ([0-9_]{3,4})[0-9_]{0,1}|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent) || [0, ""])[1]).replace("undefined", "3_2").replace("_", ".").replace("_", "")) < 10 && !window.MSStream;
 };
 
+var iOS = function iOS() {
+  if (typeof navigator === "undefined" || typeof window === "undefined") {
+    return false;
+  }
+  return ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document;
+};
+
 // Detect native Wake Lock API support
 var nativeWakeLock = function nativeWakeLock() {
-  return "wakeLock" in navigator;
+  return "wakeLock" in navigator && !iOS();
 };
 
 var NoSleep = function () {
