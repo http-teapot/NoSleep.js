@@ -16,13 +16,30 @@ const oldIOS = () =>
   ) < 10 &&
   !window.MSStream;
 
+const iOS = (() => {
+    if (typeof navigator === "undefined" || typeof window === "undefined") {
+      return false;
+    }
+    return (
+      [
+        "iPad Simulator",
+        "iPhone Simulator",
+        "iPod Simulator",
+        "iPad",
+        "iPhone",
+        "iPod"
+      ].includes(navigator.platform) ||
+      (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    );
+  })();
+
 // Detect native Wake Lock API support
-const nativeWakeLock = () => "wakeLock" in navigator;
+const nativeWakeLock = () => "wakeLock" in navigator && !iOS();
 
 class NoSleep {
-  constructor(bypassNativeWakeLock = false) {
+  constructor() {
     this.enabled = false;
-    if (!bypassNativeWakeLock && nativeWakeLock()) {
+    if (nativeWakeLock()) {
       this._wakeLock = null;
       const handleVisibilityChange = () => {
         if (this._wakeLock !== null && document.visibilityState === "visible") {
