@@ -16,7 +16,7 @@ const oldIOS = () =>
   ) < 10 &&
   !window.MSStream;
 
-const iOS = (() => {
+const iOS = () => {
     if (typeof navigator === "undefined" || typeof window === "undefined") {
       return false;
     }
@@ -31,7 +31,7 @@ const iOS = (() => {
       ].includes(navigator.platform) ||
       (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     );
-  })();
+  };
 
 // Detect native Wake Lock API support
 const nativeWakeLock = () => "wakeLock" in navigator && !iOS();
