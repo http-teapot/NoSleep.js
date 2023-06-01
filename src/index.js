@@ -20,9 +20,9 @@ const oldIOS = () =>
 const nativeWakeLock = () => "wakeLock" in navigator;
 
 class NoSleep {
-  constructor() {
+  constructor(bypassNativeWakeLock = false) {
     this.enabled = false;
-    if (nativeWakeLock()) {
+    if (!bypassNativeWakeLock && nativeWakeLock()) {
       this._wakeLock = null;
       const handleVisibilityChange = () => {
         if (this._wakeLock !== null && document.visibilityState === "visible") {
